@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details</title>
+<link rel="stylesheet" href="Item.css">
+<script src="script.js"></script>
+</head>
+<body>
+  <header>
+    <nav style="background-color: white;">
+      <a href="home.html" style="float: left;">Final Project</a>
+      <a href="Track.html">Track Order</a>
+      <a href="#">Help</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="Checkout.html"><span id="cart-count">Cart (0)</span></a>
+    </nav>
+<header>
+<div class="product" style="display: flex;">
+  <div class="image-container" style="flex: 1;">
+    <img id="product-image" src="" alt="Product Image" style="height: 300px;">
+  </div>
+  <div class="product-info" style="flex: 1;">
+    <h1 id="product-name"></h1>
+    <p id="product-description"></p>
+    <label for="delivery-date-input">Delivery Date*</label>
+    <input type="date" id="delivery-date-input" placeholder="Select date" style="width: 100%; margin-top: 20px;">
+    <h2>Purchasing Options</h2>
+    <div class="pricing-options" style="display: flex; flex-direction: column; height: 300px;">
+      <div style="flex: 2;">
+        <input type="radio" id="subscription" name="purchase-option" style="margin-right: 10px;">
+        <label for="subscription">Start a Subscription: <strong>$<span id="subscription-price"></span> + free shipping</strong></label>
+        <hr>
+        <p><strong>Best Value:</strong> Up to 30% off + free shipping on subscription deliveries</p>
+        <p><strong>Flexible:</strong> Pick your flower, date & recipient every month, or set it & forget it.</p>
+        <p><strong>No obligations:</strong> Skip as often as you like. Cancel anytime</p>
+      </div>
+      <div style="flex: 1;">
+        <input type="radio" id="one-time" name="purchase-option" checked style="margin-right: 10px;">
+        <label for="one-time">One time purchase: <strong>$<span id="one-time-price"></span></strong></label>
+      </div>
+    </div>
+    <button id="add-to-basket" style="width: 100%;">Add to Basket</button>
+    <p style="text-align: right; margin-top: 10px;">Taxes and delivery calculated later</p>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'https://final-project-latest-7ci7.onrender.com'; // Replace with your backend API URL
+
+  async function fetchProduct() {
+    const productId = getProductIdFromUrl();
+    if (productId) {
+      try {
+        const response = await fetch(`${API_URL}/flowers/${productId}`);
+        if (response.ok) {
+          const product = await response.json();
+          displayProduct(product);
+        } else {
+          console.error('Error fetching product:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      }
+    }
+  }
+  function handleAddToBasket() {
+    const productId = getProductIdFromUrl();
+    const deliveryDate = document.getElementById('delivery-date-input').value;
+    if (!deliveryDate) {
+      alert('Please select a delivery date.');
+      return;
+    }
+    const purchaseOption = document.querySelector('input[name="purchase-option"]:checked').id;
+
+    const cartItem = {
+      productId: productId,
+      deliveryDate: deliveryDate,
+      purchaseOption: purchaseOption
+    };
+
+    localStorage.setItem('cartItem', JSON.stringify(cartItem));
+
+    // Increment the cart count
+    let cartCount = parseInt(localStorage.getItem('cartCount') || '0');
+    cartCount++;
+    localStorage.setItem('cartCount', cartCount.toString());
+    updateCartCount();
+    window.location.href = 'Checkout.html';
+  }
+
+
+function updateCartCount() {
+  const cartCount = localStorage.getItem('cartCount') || '0';
+  const cartCountElement = document.getElementById('cart-count');
+  if (cartCountElement) {
+    cartCountElement.textContent = `Cart (${cartCount})`;
+  }
+}
+updateCartCount();
+
+
+  document.getElementById('add-to-basket').addEventListener('click', handleAddToBasket);
+  updateCartCount();
+
+  function getProductIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+  }
+
+  function displayProduct(product) {
+    document.getElementById('product-image').src = product.imageUrl;
+    document.getElementById('product-name').textContent = product.name;
+    document.getElementById('product-description').textContent = product.description;
+    document.getElementById('subscription-price').textContent = (product.price * 0.7).toFixed(2);
+    document.getElementById('one-time-price').textContent = product.price.toFixed(2);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+            const loginLink = document.getElementById('login-link');
+            if (localStorage.getItem('token')) {
+                loginLink.textContent = 'Log Out';
+                loginLink.href = '#';
+                loginLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    localStorage.removeItem('token');
+                    window.location.href = 'Home.html'; // Redirect to home page after logout
+                });
+            } else {
+                loginLink.textContent = 'Login';
+                loginLink.href = 'Login.html';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    updateCartCount(); // Ensure cart count is updated on page load
+});
+  fetchProduct();
+</script>
+
+</body>
+</html>

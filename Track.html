@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders</title>
+<link rel="stylesheet" href="Track.css">
+</head>
+<body>
+  <header>
+    <nav style="background-color: white;">
+      <a href="home.html" style="float: left;">Final Project</a>
+      <a href="Track.html">Track Order</a>
+      <a href="#">Help</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="Checkout.html"><span id="cart-count">Cart (0)</span></a>
+    </nav>
+<header>
+
+<div class="orders-container">
+  <h1>MY ORDERS</h1>
+  <div id="order-list">
+    <!-- Orders will be dynamically populated here -->
+  </div>
+</div>
+
+<script>
+  const API_URL = 'https://final-project-latest-7ci7.onrender.com'; // Replace with your backend API URL
+
+  async function fetchOrders() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'Login.html';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/orders`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.ok) {
+      const orders = await response.json();
+      displayOrders(orders);
+    } else {
+      console.error('Error fetching orders:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+  }
+}
+
+  function displayOrders(orders) {
+    const orderList = document.getElementById('order-list');
+
+    if (orders.length === 0) {
+      orderList.innerHTML = '<p>You have no orders.</p>';
+    } else {
+      orderList.innerHTML = '';
+
+      orders.forEach(order => {
+        const orderElement = document.createElement('div');
+        orderElement.classList.add('order');
+        orderElement.innerHTML = `
+          <h2>Order ID: ${order.id}</h2>
+          <p>Product: ${order.product.name}</p>
+          <p>Delivery Date: ${order.deliveryDate}</p>
+          <p>Total Price: $${order.totalPrice.toFixed(2)}</p>
+          <p>Recipient: ${order.recipientName}</p>
+          <p>Address: ${order.recipientAddress}</p>
+        `;
+        orderList.appendChild(orderElement);
+      });
+    }
+  }
+  
+  function updateCartCount() {
+  const cartCount = localStorage.getItem('cartCount') || '0';
+  const cartCountElement = document.getElementById('cart-count');
+  if (cartCountElement) {
+    cartCountElement.textContent = `Cart (${cartCount})`;
+  }
+}
+
+  updateCartCount();
+
+  fetchOrders();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header nav {
+    background-color: white;
+    text-align: right;
+    padding: 40px 20px;
+}
+
+nav a {
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+nav img { /* Added styles for the image in the nav */
+    float: left;
+}
+
+nav span { /* Added styles for the cart text in the nav */
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+  
+  .logo {
+    font-size: 24px;
+    color: orange;
+  }
+  
+  .product {
+    display: flex;
+    justify-content: center; /* Center the product display */
+    align-items: center; /* Align items vertically */
+    padding: 20px;
+    width: 100%; /* Ensure the product div takes full width */
+  }
+  
+  .image-container img {
+    width: 100%; /* Adjust image width to fill container */
+    height: 300px; /* Set a fixed height */
+  }
+  
+  .product-info {
+    padding: 20px;
+    width: 100%; /* Ensure info section takes full width */
+  }
+  
+  .pricing-options {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 100%; /* Full width to match the calendar input */
+  }
+  
+  .pricing-options > div:first-child {
+    flex: 2;
+    background-color: #E0F7FA; /* Light baby blue background */
+  }
+  
+  .pricing-options > div:last-child {
+    flex: 1;
+    border: 2px solid green; /* Green border */
+  }
+  
+  button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%; /* Button width to match the pricing options */
+  }
+    button:hover {
+    background-color: #006400; /* Darker green for hover */
+  }
+
+  button:active {
+    background-color: #004d00; /* Even darker green for active */
+  }
+  

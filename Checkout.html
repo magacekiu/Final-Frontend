@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Delivery</title>
+<link rel="stylesheet" href="Checkout.css">
+<script src="script.js"></script>
+</head>
+<body>
+  <header>
+    <nav style="background-color: white;">
+      <a href="home.html" style="float: left;">Final Project</a>
+      <a href="Track.html">Track Order</a>
+      <a href="#">Help</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="Checkout.html"><span id="cart-count">Cart (0)</span></a>
+    </nav>
+  <header>
+
+<div class="progress-bar">
+  <div class="step completed"><span class="circle checked"></span>REVIEW</div>
+  <div class="step current"><span class="circle"></span>DELIVERY</div>
+  <div class="step"><span class="circle filled"></span>DONE</div>
+</div>
+
+<div class="login-section">
+  <p>Save $10 on every delivery with an account</p>
+  <div class="button-container" style="display: flex; justify-content: center; margin-top: 10px;">
+    <button class="login-btn" onclick="window.location.href='Login.html'">LOG IN</button>
+    <button class="signup-btn" onclick="window.location.href='Login.html'">SIGN UP</button>
+  </div>
+</div>
+
+<div style="display: flex;">
+  <div class="sidebar" style="width: 12.5%;">
+    <img id="product-thumbnail" src="" alt="Product Thumbnail" style="height: 100px;">
+  </div>
+  <div style="width: 87.5%;">
+    <div class="product-summary">
+      <h2 id="product-name"></h2>
+      <span id="product-price"></span>
+    </div>
+
+    <form class="delivery-form" onsubmit="handlePlaceOrder(event)">
+      <h3>RECIPIENT</h3>
+      <div style="display: flex; justify-content: space-between;">
+        <div style="width: 49%;">
+          <label for="first-name">First Name*</label>
+          <input type="text" id="first-name" required placeholder="First Name">
+        </div>
+        <div style="width: 49%;">
+          <label for="last-name">Last Name*</label>
+          <input type="text" id="last-name" required placeholder="Last Name">
+        </div>
+      </div>
+      <label for="relationship">Relationship*</label>
+      <select id="relationship" required>
+        <option value="">Select</option>
+        <option value="friend">Friend</option>
+        <option value="family">Family</option>
+        <option value="colleague">Colleague</option>
+      </select>
+      <h3>DELIVER TO</h3>
+      <label for="address">Address*</label>
+      <input type="text" id="address" style="width: 100%;" required placeholder="Address">
+      <div style="display: flex; justify-content: space-between;">
+        <div style="width: 49%;">
+          <label for="city">City*</label>
+          <input type="text" id="city" required placeholder="City">
+        </div>
+        <div style="width: 49%;">
+          <label for="state">State*</label>
+          <select id="state" required>
+            <option value="">Select</option>
+            <option value="IN">Indiana</option>
+            <!-- Add states options here -->
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <div style="width: 49%;">
+          <label for="apt">Apt/Suite</label>
+          <input type="text" id="apt" placeholder="Apt/Suite">
+        </div>
+        <div style="width: 49%;">
+          <label for="zip">Zip Code*</label>
+          <input type="text" id="zip" required placeholder="Zip Code">
+        </div>
+      </div>
+      <button type="submit" class="continue-btn" style="width: 10%; float: right;">CONTINUE</button>
+      <p style="text-align: center; margin-top: 10px;">Taxes and delivery calculated later</p>
+    </form>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'https://final-project-latest-7ci7.onrender.com'; // Replace with your backend API URL
+
+  function generateOrderId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
+
+  
+  function getCartItemFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('cartItem'));
+  }
+
+  function getProductIdFromLocalStorage() {
+    return localStorage.getItem('selectedProductId');
+  }
+  function handleContinue(event) {
+  event.preventDefault();
+
+  const deliveryInfo = {
+    firstName: document.getElementById('first-name').value,
+    lastName: document.getElementById('last-name').value,
+    relationship: document.getElementById('relationship').value,
+    address: document.getElementById('address').value,
+    city: document.getElementById('city').value,
+    state: document.getElementById('state').value,
+    apt: document.getElementById('apt').value,
+    zip: document.getElementById('zip').value
+  };
+
+  const cartItem = getCartItemFromLocalStorage();
+  const orderId = generateOrderId();
+  const order = {
+    id: orderId,
+    deliveryDate: cartItem.deliveryDate,
+    purchaseOption: cartItem.purchaseOption,
+    deliveryInfo: deliveryInfo
+  };
+
+  const modifiedCartItem = {
+    productId: cartItem.productId,
+    deliveryDate: cartItem.deliveryDate,
+    purchaseOption: cartItem.purchaseOption,
+    product: cartItem.product
+  };
+
+  localStorage.setItem('order', JSON.stringify(order));
+  localStorage.setItem('orderId', orderId);
+  localStorage.setItem('deliveryInfo', JSON.stringify(deliveryInfo));
+  localStorage.setItem('cartItem', JSON.stringify(modifiedCartItem));
+  window.location.href = 'Delivery.html';
+}
+
+  function displayCartItem(cartItem) {
+    fetchProduct(cartItem.productId).then(product => {
+      document.getElementById('product-thumbnail').src = product.imageUrl;
+      document.getElementById('product-name').textContent = product.name;
+      document.getElementById('product-price').textContent = cartItem.purchaseOption === 'one-time' ? `$${product.price.toFixed(2)}` : `$${(product.price * 0.7).toFixed(2)}`;
+    });
+  }
+
+  function updateCartCount() {
+  const cartCount = localStorage.getItem('cartCount') || '0';
+  const cartCountElement = document.getElementById('cart-count');
+  if (cartCountElement) {
+    cartCountElement.textContent = `Cart (${cartCount})`;
+  }
+}
+
+  updateCartCount();
+
+  function isUserLoggedIn() {
+    return localStorage.getItem('token') !== null;
+  }
+
+  function updateLoginSection() {
+    const loginSection = document.querySelector('.login-section');
+    if (isUserLoggedIn()) {
+      loginSection.style.display = 'none';
+    } else {
+      loginSection.style.display = 'block';
+    }
+  }
+
+  updateLoginSection();
+
+  async function fetchProduct(productId) {
+    try {
+      const response = await fetch(`${API_URL}/flowers/${productId}`);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Error fetching product:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+  }
+
+
+  document.querySelector('.delivery-form').addEventListener('submit', handleContinue);
+
+  const cartItem = getCartItemFromLocalStorage();
+  if (cartItem) {
+    displayCartItem(cartItem);
+  }
+  fetchProduct();
+
+  document.addEventListener('DOMContentLoaded', function() {
+            const loginLink = document.getElementById('login-link');
+            if (localStorage.getItem('token')) {
+                loginLink.textContent = 'Log Out';
+                loginLink.href = '#';
+                loginLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    localStorage.removeItem('token');
+                    window.location.href = 'Home.html'; // Redirect to home page after logout
+                });
+            } else {
+                loginLink.textContent = 'Login';
+                loginLink.href = 'Login.html';
+            }
+        });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  header nav {
+    background-color: white;
+    text-align: right;
+    padding: 40px 20px;
+}
+
+nav a {
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+nav img { /* Added styles for the image in the nav */
+    float: left;
+}
+
+nav span { /* Added styles for the cart text in the nav */
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+  
+  .logo {
+    font-size: 24px;
+    color: orange;
+  }
+  
+  .nav a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .orders-container {
+    width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  p {
+    font-size: 16px;
+    color: #666;
+  }
+  

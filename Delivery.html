@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Summary</title>
+<link rel="stylesheet" href="Delivery.css">
+<script src="script.js"></script>
+</head>
+<body style="background-color: white;">
+  <header>
+    <nav style="background-color: white;">
+      <a href="home.html" style="float: left;">Final Project</a>
+      <a href="Track.html">Track Order</a>
+      <a href="#">Help</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="Checkout.html"><span id="cart-count">Cart (0)</span></a>
+    </nav>
+<header>
+
+<div class="progress-bar">
+  <div class="step completed"><span class="circle checked"></span>REVIEW</div>
+  <div class="step current"><span class="circle"></span>DELIVERY</div>
+  <div class="step"><span class="circle filled"></span>DONE</div>
+</div>
+
+<div class="sidebar" style="width: 12.5%; float: left;">
+    <img id="product-thumbnail" src="" alt="Product Thumbnail" style="width: 100%;">
+  </div>
+
+<div class="summary-container">
+  <h1 style="text-align: left;" id="product-name"></h1>
+  <hr>
+  <h2 style="text-align: left;">Delivery Date</h2>
+  <p style="font-size: 18px;" id="delivery-date"></p>
+  <hr>
+  <h2 style="text-align: left;">Item Pricing</h2>
+  <p style="font-size: 18px;" id="product-price"></p>
+  <hr>
+  <h2 style="text-align: left;">Delivery Address</h2>
+  <p id="delivery-address"></p>
+  <hr>
+  <div style="background-color: #f0f0f0; padding: 20px;">
+    <div class="discount-message" style="background-color: green; color: white; text-align: center; width: 80%; height: 40px; margin: 0 auto; justify-content: center; align-items: center; display: flex;">
+      <p>You are saving $10.00 on this order!</p>
+    </div>
+    
+    <p style="text-align: left;">Subtotal: <span style="float: right;" id="subtotal"></span></p>
+    <p style="text-align: left;">Delivery: <span style="float: right;">$25.00</span></p>
+    <p style="text-align: left;">Delivery Discount: <span style="float: right;">-$10.00</span></p>
+    <p style="text-align: left;">Tax: <span style="float: right;">$0.00</span></p>
+    <p style="text-align: left;"><strong>Order Total:</strong> <span style="float: right;" id="order-total"></span></p>
+  </div>
+
+  <button class="place-order-button" onclick="handlePlaceOrder()">PLACE ORDER</button>
+  <p>By Clicking "Place Order" you agree to the Terms of Use and Privacy Policy</p>
+</div>
+
+<script>
+  const API_URL = 'https://final-project-latest-7ci7.onrender.com'; // Replace with your backend API URL
+
+  function handlePlaceOrder() {
+    localStorage.removeItem('selectedProductId');
+    localStorage.removeItem('orderId');
+    localStorage.setItem('cartCount', '0'); // Reset cart count
+    updateCartCount(); // Update cart count display
+    window.location.href = 'Track.html';
+    alert('Order placed successfully!');
+  }
+
+  function updateCartCount() {
+    const cartCount = localStorage.getItem('cartCount') || '0';
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+      cartCountElement.textContent = `Cart (${cartCount})`;
+    }
+  }
+
+  function getCartItemFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('cartItem'));
+  }
+
+  async function fetchProduct(productId) {
+    try {
+      const response = await fetch(`${API_URL}/flowers/${productId}`);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Error fetching product:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', async function() {
+    const order = JSON.parse(localStorage.getItem('order'));
+    const deliveryInfo = JSON.parse(localStorage.getItem('deliveryInfo'));
+    const cartItem = getCartItemFromLocalStorage();
+    const isLoggedIn = isUserLoggedIn();
+
+    if (cartItem) {
+      const product = await fetchProduct(cartItem.productId);
+
+      document.getElementById('delivery-date').textContent = order.deliveryDate;
+
+      const addressLines = [
+        deliveryInfo.firstName + ' ' + deliveryInfo.lastName,
+        deliveryInfo.address,
+        deliveryInfo.apt ? `Apt/Suite: ${deliveryInfo.apt}` : '',
+        `${deliveryInfo.city}, ${deliveryInfo.state} ${deliveryInfo.zip}`
+      ];
+      document.getElementById('delivery-address').textContent = addressLines.filter(Boolean).join(', ');
+
+      const productPrice = cartItem.purchaseOption === 'one-time' ? product.price : product.price * 0.7;
+      document.getElementById('product-price').textContent = `$${productPrice.toFixed(2)}`;
+      document.getElementById('product-name').textContent = product.name;
+      document.getElementById('product-thumbnail').src = product.imageUrl;
+
+      const subtotal = productPrice;
+      const deliveryFee = 25;
+      const tax = 0;
+      const deliveryDiscount = isLoggedIn ? 10 : 0;
+      const total = subtotal + deliveryFee - deliveryDiscount + tax;
+
+      document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('order-total').textContent = `$${total.toFixed(2)}`;
+
+      const discountElement = document.querySelector('.discount-message');
+      if (isLoggedIn) {
+        discountElement.style.display = 'block';
+        document.getElementById('delivery-discount').textContent = `-$${deliveryDiscount.toFixed(2)}`;
+      } else {
+        discountElement.style.display = 'none';
+      }
+    }
+  });
+
+  function isUserLoggedIn() {
+    return localStorage.getItem('token') !== null;
+  }
+</script>
+
+
+
+</body>
+</html>

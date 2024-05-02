@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up to Save</title>
+<link rel="stylesheet" href="Login.css">
+<script src="script.js"></script>
+</head>
+<body>
+  <header>
+    <nav style="background-color: white;">
+      <a href="home.html" style="float: left;">Final Project</a>
+      <a href="Track.html">Track Order</a>
+      <a href="#">Help</a>
+      <a href="login.html" id="login-link">Login</a>
+      <a href="Checkout.html"><span id="cart-count">Cart (0)</span></a>
+    </nav>
+  <header>
+
+<div class="signup-container">
+  <h1>SIGN UP TO SAVE</h1>
+  <div class="button-group">
+    <button id="signup-btn" class="active">SIGN UP</button>
+    <button id="login-btn">LOG IN</button>
+  </div>
+
+  <form class="signup-form" onsubmit="handleFormSubmit(event)">
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="name@example.com">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Password">
+    <div class="show-password">
+      <button id="toggle-password" class="toggle-password" type="button">Show Password</button>
+    </div>
+
+    <button type="submit" class="create-account-btn"><span id="submit-text">CREATE AN ACCOUNT</span></button>
+    <p>By Clicking "Create an Account" you agree to the <a href="#">Terms of Use and Privacy Policy</a></p>
+  </form>
+</div>
+
+<script>
+const API_URL = 'https://final-project-latest-7ci7.onrender.com'; // Replace with your backend API URL
+
+document.getElementById('signup-btn').addEventListener('click', function() {
+    document.querySelector('.signup-container h1').style.display = 'block';
+    document.getElementById('submit-text').textContent = 'CREATE AN ACCOUNT';
+    this.classList.add('active');
+    document.getElementById('login-btn').classList.remove('active');
+});
+
+document.getElementById('login-btn').addEventListener('click', function() {
+    document.querySelector('.signup-container h1').style.display = 'none';
+    document.getElementById('submit-text').textContent = 'LOG IN';
+    this.classList.add('active');
+    document.getElementById('signup-btn').classList.remove('active');
+});
+
+async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const isSignup = document.getElementById('signup-btn').classList.contains('active');
+
+    const url = isSignup ? `${API_URL}/signup` : `${API_URL}/signin`;
+    const data = {
+        email: email,
+        password: password
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            if (isSignup) {
+                alert('Account created successfully!');
+            } else {
+                const token = await response.text();
+                localStorage.setItem('token', token);
+                window.location.href = 'Home.html';
+            }
+        } else {
+            alert('Error: ' + response.statusText);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+</script>
+
+</body>
+</html>

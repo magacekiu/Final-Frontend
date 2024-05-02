@@ -1,0 +1,126 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  header nav {
+    background-color: white;
+    text-align: right;
+    padding: 40px 20px;
+}
+
+nav a {
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+nav img { /* Added styles for the image in the nav */
+    float: left;
+}
+
+nav span { /* Added styles for the cart text in the nav */
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+  .progress-bar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #eee;
+    padding: 10px;
+    font-weight: bold;
+    position: relative;
+  }
+  .progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; /* Adjusted to move the line above the text */
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background-color: green;
+    z-index: 0;
+  }
+  .step {
+    position: relative;
+    z-index: 1;
+  }
+  .circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid green;
+    display: inline-block;
+    margin-bottom: 5px; /* Space between circle and text */
+  }
+  .checked, .filled {
+    background: green;
+  }
+  .current {
+    color: green;
+  }
+  
+  .completed {
+    color: green;
+  }
+  
+  .pending {
+    color: grey;
+  }
+  
+  .summary-container {
+    width: 800px; /* Increased from 300px */
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: left; /* Ensure all text inside is left-aligned */
+  }
+  
+  .summary-container img {
+    width: 100%;
+    height: auto;
+    margin: 10px 0;
+    float: left; /* Reposition the image to the left of the summary container */
+  }
+  
+  .pricing {
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table td {
+    padding: 5px;
+    text-align: right;
+  }
+  
+  button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  button:hover {
+    background-color: #006400; /* Darker green for hover */
+  }
+
+  button:active {
+    background-color: #004d00; /* Even darker green for active */
+  }
+  
+  p {
+    font-size: 12px;
+  }
+  

@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header nav {
+    background-color: white;
+    text-align: right;
+    padding: 40px 20px;
+}
+
+nav a {
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+nav img { /* Added styles for the image in the nav */
+    float: left;
+}
+
+nav span { /* Added styles for the cart text in the nav */
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+.hero {
+    background-color: lightpink;
+    padding: 10px;
+    height: 400px;
+    text-align: left; /* Changed from center to left */
+    display: flex; /* Added to align items in hero section */
+}
+
+.hero div { /* Added to style the text container in hero section */
+    width: 80%;
+    height: 50%;
+}
+
+.hero img { /* Added to style the image in hero section */
+    width: 33%;
+}
+
+.filters select { /* Changed from button to select for dropdowns */
+    margin: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: lightgrey;
+}
+
+.products {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.product {
+    text-align: left; /* Changed from center to left */
+    width: 300px; /* Increased width */
+    margin: 20px; /* Added margin for spacing */
+}
+
+.product img {
+    width: 100%;
+    max-width: 200px;
+    height: 150px; /* Set a fixed height */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+footer {
+    text-align: left; /* Changed from center to left */
+    padding: 10px;
+    background-color: lightgrey;
+}

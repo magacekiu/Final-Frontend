@@ -1,0 +1,116 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff; /* Changed from #f4f4f4 to white */
+  }
+  
+  header nav {
+    background-color: white;
+    text-align: right;
+    padding: 40px 20px;
+}
+
+nav a {
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+nav img { /* Added styles for the image in the nav */
+    float: left;
+}
+
+nav span { /* Added styles for the cart text in the nav */
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+}
+  
+  .logo {
+    font-size: 24px;
+    color: orange;
+  }
+  
+  .nav a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .signup-container {
+    width: 300px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .button-group button {
+    width: 50%;
+    padding: 10px;
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+    outline: none;
+    color: gray; /* Default color */
+  }
+  
+  .active {
+    border-bottom: 2px solid black;
+    color: black; /* Bold black text for active */
+    font-weight: bold; /* Make text bold */
+  }
+  
+  .signup-form label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .signup-form input[type="email"],
+  .signup-form input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+  }
+  
+  .show-password {
+    position: absolute;
+    right: 20px; /* Position to the right */
+    bottom: 0;
+  }
+  
+  .toggle-password {
+    background-color: #fff;
+    color: green;
+    border: 2px solid green;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .create-account-btn {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .signup-form p {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+  }
+  .selected {
+    color: black;
+    font-weight: bold;
+    border: 2px solid black;
+  }

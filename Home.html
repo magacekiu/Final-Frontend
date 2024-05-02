@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floral Project</title>
+    <link rel="stylesheet" href="Home.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <nav style="background-color: white;">
+            <a href="home.html" style="float: left;">Final Project</a>
+            <a href="Track.html">Track Order</a>
+            <a href="#">Help</a>
+            <a href="login.html" id="login-link">Login</a>
+            <a href="Checkout.html"><span id="cart-count">Cart (0)</span></a>
+          </nav>
+    </header>
+    <main>
+        <section class="hero""> 
+            <div style="width: 66%; text-align: left;">
+                <h1>Send Her Blooms</h1>
+                <hr>
+                <p>She will Love! Shop All Mother's Day Flowers and Gifts!</p>
+            </div>
+            <img src="https://cdn.britannica.com/45/5645-050-B9EC0205/head-treasure-flower-disk-flowers-inflorescence-ray.jpg" alt="Flowers" style="width: 33%;">
+        </section>
+        <section class="filters" style="display: flex; justify-content: space-between;">
+            <div>
+                <strong>Filter By:</strong>
+                <select>
+                    <option>Flower Type</option>
+                    <option>Mixed</option>
+                    <option>Roses</option>
+                    <option>Lilies</option>
+                    <option>Tulips</option>
+                    <option>Daisies</option>
+                </select>
+                <select>
+                    <option>Occasion</option>
+                    <option>Mother's Day</option>
+                    <option>Birthday</option>
+                    <option>Thank You</option>
+                </select>
+                <select>
+                    <option>Color</option>
+                    <option>Mixed</option>
+                    <option>Red</option>
+                    <option>Yellow</option>
+                    <option>Green</option>
+                    <option>Orange</option>
+                </select>
+            </div>
+            <select style="float: right;">
+                <option>Sort</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+            </select>
+        </section>
+        <section class="products" id="product-list">
+            <!-- Products will be dynamically populated here -->
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 Floral Project</p>
+    </footer>
+
+    <script>
+        const API_URL = 'https://final-project-latest-7ci7.onrender.com'; // Replace with your backend API URL
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch(`${API_URL}/flowers`);
+                if (response.ok) {
+                    const products = await response.json();
+                    displayProducts(products);
+                } else {
+                    console.error('Error fetching products:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        }
+
+        function updateCartCount() {
+  const cartCount = localStorage.getItem('cartCount') || '0';
+  const cartCountElement = document.getElementById('cart-count');
+  if (cartCountElement) {
+    cartCountElement.textContent = `Cart (${cartCount})`;
+  }
+}
+
+  updateCartCount();
+
+        function displayProducts(products) {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.classList.add('product');
+                productElement.dataset.id = product.id;
+                productElement.innerHTML = `
+                    <a href="Item.html?id=${product.id}">
+                        <img src="${product.imageUrl}" alt="${product.name}" style="height: 150px;">
+                        <h2>${product.name}</h2>
+                        <p>$${product.price.toFixed(2)}</p>
+                    </a>
+                `;
+                productList.appendChild(productElement);
+            });
+        }
+
+        fetchProducts();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginLink = document.getElementById('login-link');
+            if (localStorage.getItem('token')) {
+                loginLink.textContent = 'Log Out';
+                loginLink.href = '#';
+                loginLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    localStorage.removeItem('token');
+                    window.location.href = 'Home.html'; // Redirect to home page after logout
+                });
+            } else {
+                loginLink.textContent = 'Login';
+                loginLink.href = 'Login.html';
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount(); // Ensure cart count is updated on page load
+        });
+    </script>
+</body>
+</html>
